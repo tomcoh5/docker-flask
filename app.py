@@ -116,7 +116,7 @@ def multi_post():
     network = request.form['text']
     bashcommand = "docker network create  " + network
     process = subprocess.Popen(bashcommand.split(), stdout=subprocess.PIPE)
-    return redirect("http://" + ip + ":5000/objects")
+    return redirect("http://" + ip + ":80/objects")
 
 
 @app.route('/objects')
@@ -140,17 +140,17 @@ def objects_post():
         if image == "apache" or image == "nginx" or image == "httpd":
             bashcommand = "docker run -d --name " + name + " -p 8080:8080 " + image
             dockercommand.append(bashcommand)
-            return redirect("http://" + ip + ":5000/objects")
+            return redirect("http://" + ip + ":80/objects")
         elif image == "grafana":
             bashcommand = "docker run -d -p 3000:3000 grafana/grafana"
             dockercommand.append(bashcommand)
-            return redirect("http://" + ip + ":5000/objects")
+            return redirect("http://" + ip + ":80/objects")
         elif image == "postgresql" or image == "postgres":
-            return redirect("http://" + ip + ":5000/passwordpost2")
+            return redirect("http://" + ip + ":80/passwordpost2")
         elif image == "mysql":
-            return redirect("http://" + ip + ":5000/passwordmysql2")
+            return redirect("http://" + ip + ":80/passwordmysql2")
         else:
-            return redirect("http://" + ip + ":5000/deployment2")
+            return redirect("http://" + ip + ":80/deployment2")
 
 
 
@@ -173,17 +173,17 @@ def plz_post():
     if image == "apache" or image == "nginx" or image == "httpd":
         bashcommand = "docker run -d --name " + name + " -p 8080:8080 " + image
         deploycommand()
-        return redirect("http://" + ip + ":5000")
+        return redirect("http://" + ip + ":80")
     elif image == "grafana":
         bashcommand = "docker run -d -p 3000:3000 " + image
         deploycommand()
-        return redirect("http://" + ip + ":5000")
+        return redirect("http://" + ip + ":80")
     elif image == "postgresql" or image == "postgres":
-        return redirect("http://" + ip + ":5000/passwordpost")
+        return redirect("http://" + ip + ":80/passwordpost")
     elif image == "mysql":
-        return redirect("http://" + ip + ":5000/passwordmysql")
+        return redirect("http://" + ip + ":80/passwordmysql")
     else:
-        return redirect("http://" + ip + ":5000/deployment")
+        return redirect("http://" + ip + ":80/deployment")
 
 @app.route('/display')
 def display():
@@ -194,7 +194,7 @@ def display():
 def display_post():
     choose = request.form['text']
     if choose == "no":
-        return redirect("http://" + ip + ":5000")
+        return redirect("http://" + ip + ":80")
     else:
         for command in dockercommand:
             deploycommand2(command)
@@ -212,7 +212,7 @@ def password_post():
     password = request.form['text']
     bashcommand = "docker run --name " + name + " -e POSTGRES_PASSWORD=" + password + " -d postgres"
     deploycommand()
-    return redirect("http://" + ip + ":5000")
+    return redirect("http://" + ip + ":80")
 
 
 @app.route('/passwordpost2')
@@ -226,7 +226,7 @@ def password_post2():
     password = request.form['text']
     bashcommand = "docker run --name " + name + " -e POSTGRES_PASSWORD=" + password + " -d postgres"
     dockercommand.append(bashcommand)
-    return redirect("http://" + ip + ":5000/objects")
+    return redirect("http://" + ip + ":80/objects")
 
 
 @app.route('/passwordmysql2')
@@ -240,7 +240,7 @@ def passwordsql_post2():
     password = request.form['text']
     bashcommand = "docker run --name " + name + " -e MYSQL_ROOT_PASSWORD=" + password + " -d mysql"
     dockercommand.append(bashcommand)
-    return redirect("http://" + ip + ":5000/objects")
+    return redirect("http://" + ip + ":80/objects")
 
 
 @app.route('/deployment2')
@@ -255,11 +255,11 @@ def deployment_post2():
     if port == "no":
         bashcommand = "docker run -d --name " + name + " " + image
         dockercommand.append(bashcommand)
-        return redirect("http://" + ip + ":5000/objects")
+        return redirect("http://" + ip + ":80/objects")
     else:
         bashcommand = "docker run -d --name " + name + " -p " + port + "  " + image
         dockercommand.append(bashcommand)
-        return redirect("http://" + ip + ":5000")
+        return redirect("http://" + ip + ":80")
 
 
 
@@ -281,7 +281,7 @@ def passwordsql_post():
     password = request.form['text']
     bashcommand = "docker run --name " + name + " -e MYSQL_ROOT_PASSWORD=" + password + " -d mysql"
     deploycommand()
-    return redirect("http://" + ip + ":5000")
+    return redirect("http://" + ip + ":80")
 
 
 @app.route('/deployment')
@@ -296,11 +296,11 @@ def deployment_post():
     if port == "no":
         bashcommand = "docker run -d --name " + name + " " + image
         deploycommand()
-        return redirect("http://" + ip + ":5000")
+        return redirect("http://" + ip + ":80")
     else:
         bashcommand = "docker run -d --name " + name + " -p " + port + "  " + image
         deploycommand()
-        return redirect("http://" + ip + ":5000")
+        return redirect("http://" + ip + ":80")
 
 
 if __name__ == '__main__':
