@@ -54,8 +54,14 @@ def home():
         if request.method == 'POST':
             global username
             username = getname(request.form['username'])
-            return render_template('my-form.html', data=getfollowedby(username), user = username)
+            return render_template('my-form.html', data=getfollowedby(username), user = username, dockerlist = process)
         return render_template('index.html')
+
+@app.route('/list')
+def dockerlist():
+    command = 'docker container ls'
+    my_output = subprocess.check_output(command, shell=True).decode('utf-8')
+    return render_template('list.html', dockerlist = my_output)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -70,7 +76,7 @@ def login():
         try:
             data = User.query.filter_by(username=name, password=passw).first()
             if data is not None:
-                session['logged_in'] = True
+                session['logged_in'] = True 
                 return render_template('my-form.html')
             else:
                 return render_template('errorlogin.html')
@@ -112,7 +118,7 @@ def multi_post():
     global network
     global bashcommand
     network = request.form['text']
-    bashcommand = "docker network create  " + network
+    bashcommand = "docker network create  " + network 
     process = subprocess.Popen(bashcommand.split(), stdout=subprocess.PIPE)
     return redirect("http://" + ip + ":80/objects")
 
@@ -136,7 +142,7 @@ def objects_post():
         image = arrange[0]
         name = arrange[1]
         if image == "apache" or image == "nginx" or image == "httpd":
-            bashcommand = "docker run -d --name " + name + " -p 8080:8080 " + image
+            bashcommand = "docker run -d --name " + username +  "/"  + name + " -p 8080:8080 " + image
             dockercommand.append(bashcommand)
             return redirect("http://" + ip + ":80/objects")
         elif image == "grafana":

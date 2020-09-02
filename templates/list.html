@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+{% if session['logged_in'] %}
+  		<p> {{ username }} </p>
+		<p> {{ user }} </p> 
+		<p> {{ dockerlist }} </p> 
+{% else %}
+<p>Not login!</p>
+
+<a href="/login">Login</a> 
+<a href="/register">Register</a>
+
+{% endif %}
+{% endblock %}
